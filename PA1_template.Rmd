@@ -2,6 +2,8 @@
 ###Load the Data
 ```{r}
 setwd("~/")
+library(knitr)
+library(dplyr)
 activity_rawdata <- read.csv("activity.csv", stringsAsFactors=FALSE)
 ```
 
@@ -30,12 +32,12 @@ activity <- data.frame(date=activity_rawdata$newdate,
 ###Calculate the total number of steps taken per day
 ```{r}
 daily_sum<-activity %>% group_by(date) %>% summarize(total_steps=sum(steps))
-daily_sum2 <- c(daily_sum[complete.cases(daily_sum[2]),])
+daily_sum3 <- c(daily_sum[complete.cases(daily_sum[2]),])
 ```
 
 ###Make a histogram of the total number of steps taken each day
 ```{r}
-hist(daily_sum2$total_steps, 
+hist(daily_sum3$total_steps, 
      breaks=seq(from=0, to=25000, by=5000),
      col="Pink", 
      xlab="Total Steps", 

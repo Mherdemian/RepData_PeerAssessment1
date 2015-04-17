@@ -3,6 +3,24 @@
 
 ```r
 setwd("~/")
+library(knitr)
+library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 activity_rawdata <- read.csv("activity.csv", stringsAsFactors=FALSE)
 ```
 
@@ -35,24 +53,13 @@ activity <- data.frame(date=activity_rawdata$newdate,
 
 ```r
 daily_sum<-activity %>% group_by(date) %>% summarize(total_steps=sum(steps))
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "%>%"
-```
-
-```r
-daily_sum2 <- c(daily_sum[complete.cases(daily_sum[2]),])
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'daily_sum' not found
+daily_sum3 <- c(daily_sum[complete.cases(daily_sum[2]),])
 ```
 
 ###Make a histogram of the total number of steps taken each day
 
 ```r
-hist(daily_sum2$total_steps, 
+hist(daily_sum3$total_steps, 
      breaks=seq(from=0, to=25000, by=5000),
      col="Pink", 
      xlab="Total Steps", 
@@ -60,9 +67,7 @@ hist(daily_sum2$total_steps,
      main="Daily Steps\n(NA removed)")
 ```
 
-```
-## Error in hist(daily_sum2$total_steps, breaks = seq(from = 0, to = 25000, : object 'daily_sum2' not found
-```
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
 
 ###Calculate and report the mean and median of the total number of steps taken per day
 
@@ -137,21 +142,7 @@ activity[is.na(activity)] <- 0
 
 ```r
 daily_sum<-activity %>% group_by(date) %>% summarize(total_steps=sum(steps))
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "%>%"
-```
-
-```r
 daily_sum2 <- c(daily_sum[complete.cases(daily_sum[2]),])
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'daily_sum' not found
-```
-
-```r
 hist(daily_sum2$total_steps, 
      breaks=seq(from=0, to=25000, by=5000),
      col="Yellow", 
@@ -160,9 +151,7 @@ hist(daily_sum2$total_steps,
      main="Daily Steps\n(NA removed)")
 ```
 
-```
-## Error in hist(daily_sum2$total_steps, breaks = seq(from = 0, to = 25000, : object 'daily_sum2' not found
-```
+![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png) 
 
 ```r
 echo = FALSE
@@ -170,7 +159,7 @@ mean(daily_sum2$total_steps)
 ```
 
 ```
-## Error in mean(daily_sum2$total_steps): object 'daily_sum2' not found
+## [1] 9354.23
 ```
 
 ```r
@@ -178,7 +167,7 @@ median(daily_sum2$total_steps)
 ```
 
 ```
-## Error in median(daily_sum2$total_steps): object 'daily_sum2' not found
+## [1] 10395
 ```
 
 ```r
@@ -198,18 +187,11 @@ activity$weekdayType <- ifelse(weekdays(activity$date) %in% c("Satuday", "Sunday
 ```r
 library(lattice)
 day_mean <-activity %>% group_by(weekday) %>% summarize(mean_steps=mean(steps))
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "%>%"
-```
-
-```r
 day_mean$weekdayType <- ifelse(weekdays(day_mean$weekday) %in% c("Saturday", "Sunday"), "weekend", "weekday")
 ```
 
 ```
-## Error in weekdays(day_mean$weekday): object 'day_mean' not found
+## Error in UseMethod("weekdays"): no applicable method for 'weekdays' applied to an object of class "factor"
 ```
 
 ```r
@@ -222,5 +204,5 @@ xyplot(mean ~ interval | weekdayType, day_mean,
 ```
 
 ```
-## Error in eval(substitute(groups), data, environment(x)): object 'day_mean' not found
+## Error in eval(expr, envir, enclos): object 'weekdayType' not found
 ```

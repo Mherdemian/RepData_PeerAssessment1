@@ -205,7 +205,23 @@ hr {
 ###Load the Data</p>
 
 <pre><code class="r">setwd(&quot;~/&quot;)
-activity_rawdata &lt;- read.csv(&quot;activity.csv&quot;, stringsAsFactors=FALSE)
+library(knitr)
+library(dplyr)
+</code></pre>
+
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;
+## 
+## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter
+## 
+## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union
+</code></pre>
+
+<pre><code class="r">activity_rawdata &lt;- read.csv(&quot;activity.csv&quot;, stringsAsFactors=FALSE)
 </code></pre>
 
 <p>###Process/transform the data</p>
@@ -233,20 +249,12 @@ activity_rawdata$date &lt;- NULL
 ###Calculate the total number of steps taken per day</p>
 
 <pre><code class="r">daily_sum&lt;-activity %&gt;% group_by(date) %&gt;% summarize(total_steps=sum(steps))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;%&gt;%&quot;
-</code></pre>
-
-<pre><code class="r">daily_sum2 &lt;- c(daily_sum[complete.cases(daily_sum[2]),])
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;daily_sum&#39; not found
+daily_sum3 &lt;- c(daily_sum[complete.cases(daily_sum[2]),])
 </code></pre>
 
 <p>###Make a histogram of the total number of steps taken each day</p>
 
-<pre><code class="r">hist(daily_sum2$total_steps, 
+<pre><code class="r">hist(daily_sum3$total_steps, 
      breaks=seq(from=0, to=25000, by=5000),
      col=&quot;Pink&quot;, 
      xlab=&quot;Total Steps&quot;, 
@@ -254,8 +262,7 @@ activity_rawdata$date &lt;- NULL
      main=&quot;Daily Steps\n(NA removed)&quot;)
 </code></pre>
 
-<pre><code>## Error in hist(daily_sum2$total_steps, breaks = seq(from = 0, to = 25000, : object &#39;daily_sum2&#39; not found
-</code></pre>
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-6"/> </p>
 
 <p>###Calculate and report the mean and median of the total number of steps taken per day</p>
 
@@ -320,18 +327,8 @@ activity[is.na(activity)] &lt;- 0
 <p>###Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?</p>
 
 <pre><code class="r">daily_sum&lt;-activity %&gt;% group_by(date) %&gt;% summarize(total_steps=sum(steps))
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;%&gt;%&quot;
-</code></pre>
-
-<pre><code class="r">daily_sum2 &lt;- c(daily_sum[complete.cases(daily_sum[2]),])
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;daily_sum&#39; not found
-</code></pre>
-
-<pre><code class="r">hist(daily_sum2$total_steps, 
+daily_sum2 &lt;- c(daily_sum[complete.cases(daily_sum[2]),])
+hist(daily_sum2$total_steps, 
      breaks=seq(from=0, to=25000, by=5000),
      col=&quot;Yellow&quot;, 
      xlab=&quot;Total Steps&quot;, 
@@ -339,20 +336,19 @@ activity[is.na(activity)] &lt;- 0
      main=&quot;Daily Steps\n(NA removed)&quot;)
 </code></pre>
 
-<pre><code>## Error in hist(daily_sum2$total_steps, breaks = seq(from = 0, to = 25000, : object &#39;daily_sum2&#39; not found
-</code></pre>
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-13"/> </p>
 
 <pre><code class="r">echo = FALSE
 mean(daily_sum2$total_steps)
 </code></pre>
 
-<pre><code>## Error in mean(daily_sum2$total_steps): object &#39;daily_sum2&#39; not found
+<pre><code>## [1] 9354.23
 </code></pre>
 
 <pre><code class="r">median(daily_sum2$total_steps)
 </code></pre>
 
-<pre><code>## Error in median(daily_sum2$total_steps): object &#39;daily_sum2&#39; not found
+<pre><code>## [1] 10395
 </code></pre>
 
 <pre><code class="r">#Yes the mean and median are different then what they were previously
@@ -369,15 +365,10 @@ mean(daily_sum2$total_steps)
 
 <pre><code class="r">library(lattice)
 day_mean &lt;-activity %&gt;% group_by(weekday) %&gt;% summarize(mean_steps=mean(steps))
+day_mean$weekdayType &lt;- ifelse(weekdays(day_mean$weekday) %in% c(&quot;Saturday&quot;, &quot;Sunday&quot;), &quot;weekend&quot;, &quot;weekday&quot;)
 </code></pre>
 
-<pre><code>## Error in eval(expr, envir, enclos): could not find function &quot;%&gt;%&quot;
-</code></pre>
-
-<pre><code class="r">day_mean$weekdayType &lt;- ifelse(weekdays(day_mean$weekday) %in% c(&quot;Saturday&quot;, &quot;Sunday&quot;), &quot;weekend&quot;, &quot;weekday&quot;)
-</code></pre>
-
-<pre><code>## Error in weekdays(day_mean$weekday): object &#39;day_mean&#39; not found
+<pre><code>## Error in UseMethod(&quot;weekdays&quot;): no applicable method for &#39;weekdays&#39; applied to an object of class &quot;factor&quot;
 </code></pre>
 
 <pre><code class="r">xyplot(mean ~ interval | weekdayType, day_mean, 
@@ -388,7 +379,7 @@ day_mean &lt;-activity %&gt;% group_by(weekday) %&gt;% summarize(mean_steps=mean
        layout=c(1,2))
 </code></pre>
 
-<pre><code>## Error in eval(substitute(groups), data, environment(x)): object &#39;day_mean&#39; not found
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;weekdayType&#39; not found
 </code></pre>
 
 </body>

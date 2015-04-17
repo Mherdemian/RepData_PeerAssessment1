@@ -66,8 +66,7 @@ Fork/clone the [GitHub repository created for this
 assignment](http://github.com/rdpeng/RepData_PeerAssessment1). You
 will submit this assignment by pushing your completed files into your
 forked repository on GitHub. The assignment submission will consist of
-the URL to your GitHub repository and the SHA-1 commit ID for your
-repository state.
+the URL to your GitHub repository.
 
 NOTE: The GitHub repository also contains the dataset for the
 assignment so you do not have to download the data separately.
@@ -146,6 +145,7 @@ To submit the assignment:
 4. Push your `master` branch to GitHub.
 
 5. Submit the URL to your GitHub repository for this assignment on the course web site.
+<<<<<<< HEAD
 
 In addition to submitting the URL for your GitHub repository, you will
 need to submit the 40 character SHA-1 hash (as string of numbers from
@@ -166,3 +166,5 @@ https://github.com/rdpeng/RepData_PeerAssessment1
 
 7c376cc5447f11537f8740af8e07d6facc3d9645
 ```
+=======
+>>>>>>> parent of dc20c7c... Update instructions to add SHA-1 hash

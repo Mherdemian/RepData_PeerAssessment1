@@ -1,6 +1,7 @@
 ##Loading and preprocessing the data
 ###Load the Data
-```{r}
+
+```r
 setwd("~/")
 activity_rawdata <- read.csv("activity.csv", stringsAsFactors=FALSE)
 ```
@@ -8,18 +9,21 @@ activity_rawdata <- read.csv("activity.csv", stringsAsFactors=FALSE)
 ###Process/transform the data
 
 Add date field to a useable format
-```{r}
+
+```r
 activity_rawdata$newdate <- strptime(as.character(activity_rawdata$date), "%Y-%m-%d")
 activity_rawdata$date <- NULL
 ```
 
 Add a new field to show the day of the week
-```{r}
+
+```r
 activity_rawdata$day <- weekdays(as.Date(activity_rawdata$newdate))
 ```
 
 Organize all the new columns
-```{r}
+
+```r
 activity <- data.frame(date=activity_rawdata$newdate, 
                        weekday=activity_rawdata$day, 
                        interval=activity_rawdata$interval,
@@ -28,13 +32,26 @@ activity <- data.frame(date=activity_rawdata$newdate,
 
 ##What is mean total number of steps taken per day?
 ###Calculate the total number of steps taken per day
-```{r}
+
+```r
 daily_sum<-activity %>% group_by(date) %>% summarize(total_steps=sum(steps))
+```
+
+```
+## Error in eval(expr, envir, enclos): could not find function "%>%"
+```
+
+```r
 daily_sum2 <- c(daily_sum[complete.cases(daily_sum[2]),])
 ```
 
+```
+## Error in eval(expr, envir, enclos): object 'daily_sum' not found
+```
+
 ###Make a histogram of the total number of steps taken each day
-```{r}
+
+```r
 hist(daily_sum2$total_steps, 
      breaks=seq(from=0, to=25000, by=5000),
      col="Pink", 
@@ -43,15 +60,32 @@ hist(daily_sum2$total_steps,
      main="Daily Steps\n(NA removed)")
 ```
 
+```
+## Error in hist(daily_sum2$total_steps, breaks = seq(from = 0, to = 25000, : object 'daily_sum2' not found
+```
+
 ###Calculate and report the mean and median of the total number of steps taken per day
-```{r}
+
+```r
 mean(daily_sum2$total_steps)
+```
+
+```
+## Error in mean(daily_sum2$total_steps): object 'daily_sum2' not found
+```
+
+```r
 median(daily_sum2$total_steps)
+```
+
+```
+## Error in median(daily_sum2$total_steps): object 'daily_sum2' not found
 ```
 
 ##What is the average daily activity pattern?
 ###Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
-```{r}
+
+```r
 #Find the mean for each interval inclusive of all dates
 mean_data <- aggregate(activity$steps, 
                        by=list(activity$interval), 
@@ -70,61 +104,123 @@ plot(mean_data$interval,
      main="Avg Steps Per 5min Interval\n(NA removed)")
 ```
 
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
+
 ###Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-```{r}
+
+```r
 max_mean <- which(mean_data$mean == max(mean_data$mean))
 max_interval <- mean_data[max_mean, 1]
 ```
 
 ##Imputing missing values
 ###Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
-```{r}
+
+```r
 NA_total <- sum(is.na(activity$steps))
 ```
 
 ###Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
-```{r}
+
+```r
 #Replace all NA's with 0
 activity[is.na(activity)] <- 0
 ```
 
 ###Create a new dataset that is equal to the original dataset but with the missing data filled in.
-```{r}
+
+```r
 activity[is.na(activity)] <- 0
 ```
 
 ###Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
-```{r}
+
+```r
 daily_sum<-activity %>% group_by(date) %>% summarize(total_steps=sum(steps))
+```
+
+```
+## Error in eval(expr, envir, enclos): could not find function "%>%"
+```
+
+```r
 daily_sum2 <- c(daily_sum[complete.cases(daily_sum[2]),])
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'daily_sum' not found
+```
+
+```r
 hist(daily_sum2$total_steps, 
      breaks=seq(from=0, to=25000, by=5000),
      col="Yellow", 
      xlab="Total Steps", 
      ylim=c(0, 50), 
      main="Daily Steps\n(NA removed)")
+```
+
+```
+## Error in hist(daily_sum2$total_steps, breaks = seq(from = 0, to = 25000, : object 'daily_sum2' not found
+```
+
+```r
 echo = FALSE
 mean(daily_sum2$total_steps)
+```
+
+```
+## Error in mean(daily_sum2$total_steps): object 'daily_sum2' not found
+```
+
+```r
 median(daily_sum2$total_steps)
+```
+
+```
+## Error in median(daily_sum2$total_steps): object 'daily_sum2' not found
+```
+
+```r
 #Yes the mean and median are different then what they were previously
 ```
 
 ##Are there differences in activity patterns between weekdays and weekends?
 ###Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
-```{r}
+
+```r
 activity$weekdayType <- ifelse(weekdays(activity$date) %in% c("Satuday", "Sunday"), 
     "weekend", "weekday")
 ```
 
 ###Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
-```{r}
+
+```r
 library(lattice)
 day_mean <-activity %>% group_by(weekday) %>% summarize(mean_steps=mean(steps))
+```
+
+```
+## Error in eval(expr, envir, enclos): could not find function "%>%"
+```
+
+```r
 day_mean$weekdayType <- ifelse(weekdays(day_mean$weekday) %in% c("Saturday", "Sunday"), "weekend", "weekday")
+```
+
+```
+## Error in weekdays(day_mean$weekday): object 'day_mean' not found
+```
+
+```r
 xyplot(mean ~ interval | weekdayType, day_mean, 
        type="l", 
        lwd=1, 
        xlab="Interval", 
        ylab="Number of steps", 
        layout=c(1,2))
+```
+
+```
+## Error in eval(substitute(groups), data, environment(x)): object 'day_mean' not found
 ```
